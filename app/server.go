@@ -26,11 +26,24 @@ func main() {
 			fmt.Println("Error accepting connection: ", err.Error())
 			os.Exit(1)
 		}
-		pong(conn)
+		go handleConnection(conn)
 	}
 }
 
-func pong(conn net.Conn) {
+func handleConnection(conn net.Conn) {
+	buffer := make([]byte, 1024)
+	for {
+		n, err := conn.Read(buffer)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+		fmt.Printf("Received %v\n", string(buffer[0:n]))
+		handlePing(conn)
+	}
+}
+
+func handlePing(conn net.Conn) string {
 	conn.Write([]byte("+PONG\r\n"))
-	return
+	return "+PONG\r\n"
 }
