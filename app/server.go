@@ -30,6 +30,7 @@ func main() {
 	}
 }
 
+// Handle connections
 func handleConnection(conn net.Conn) {
 	buffer := make([]byte, 1024)
 	for {
